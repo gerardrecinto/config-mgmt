@@ -1,0 +1,7 @@
+file_client: local
+file_roots:
+  base:
+    - /lab/salt
+    - /lab
+cachedir: /var/cache/salt-lab
+log_level: warning

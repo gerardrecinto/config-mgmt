@@ -1,0 +1,7 @@
+# One source of truth. Puppet and Salt both read this file.
+app_version: "1.4.2"
+api_port: 8080
+admin_port: 9090
+allow_source: "172.28.0.0/16"
+allow_tcp_ports:
+  - 8080

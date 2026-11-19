@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>config-mgmt-lab</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#57606a;--line:#d0d7de;--code:#f6f8fa;--link:#0b5cad}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9da7b3;--line:#30363d;--code:#161b22;--link:#58a6ff}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px}
+a{color:var(--link)} h1{margin:0 0 4px} p.sub{color:var(--mut);margin-top:0}
+pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:12px;overflow:auto;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:14px} td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+</style></head><body><main>
+<h1>config-mgmt-lab</h1>
+<p class="sub">One Linux web node, built with Puppet and with Salt from the same desired state, then checked from the outside.</p>
+<p><a href="https://github.com/gerardrecinto/config-mgmt-lab">Source</a> · <a href="https://github.com/gerardrecinto/config-mgmt-lab/blob/main/docs/TEST_OUTPUT.txt">Recorded test output</a></p>
+<pre>./scripts/test.sh</pre>
+<table>
+<tr><th>Check</th><th>Result</th></tr>
+<tr><td>Idempotency</td><td>First run changes, second run changes nothing, both tools</td></tr>
+<tr><td>HTTP API</td><td>200, 404, 405 and exact JSON bodies from a separate container</td></tr>
+<tr><td>Firewall</td><td>Admin port answers on loopback, dropped from the probe (curl exit 28)</td></tr>
+<tr><td>Parity</td><td>Rendered nginx config byte-identical, iptables rules identical</td></tr>
+<tr><td>Drift</td><td>Config edit, deleted rule and stopped nginx repaired in one converge</td></tr>
+</table>
+<p>26 checks pass in Docker. Masterless only: Puppet Server, PuppetDB and a Salt master are not exercised. The README has the Puppet versus Salt trade-offs.</p>
+</main></body></html>

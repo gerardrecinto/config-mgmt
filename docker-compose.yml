@@ -1,0 +1,17 @@
+x-node: &node
+  build: .
+  image: config-mgmt-lab:dev
+  cap_add: [NET_ADMIN]
+  volumes: [".:/lab:ro"]
+  networks: [lab]
+
+services:
+  node-puppet: *node
+  node-salt: *node
+  probe:
+    <<: *node
+networks:
+  lab:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

@@ -1,0 +1,14 @@
+# managed by config-mgmt-lab, do not edit
+server {
+    listen {{ d.api_port }};
+    default_type application/json;
+    if ($request_method !~ ^(GET|HEAD)$) { return 405 '{"error":"method not allowed"}'; }
+    location = /healthz { return 200 '{"status":"ok"}'; }
+    location = /version { return 200 '{"version":"{{ d.app_version }}"}'; }
+    location / { return 404 '{"error":"not found"}'; }
+}
+server {
+    listen {{ d.admin_port }};
+    default_type application/json;
+    location / { return 200 '{"admin":true}'; }
+}

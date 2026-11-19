@@ -1,0 +1,15 @@
+<%- | Integer $api_port, Integer $admin_port, String $app_version | -%>
+# managed by config-mgmt-lab, do not edit
+server {
+    listen <%= $api_port %>;
+    default_type application/json;
+    if ($request_method !~ ^(GET|HEAD)$) { return 405 '{"error":"method not allowed"}'; }
+    location = /healthz { return 200 '{"status":"ok"}'; }
+    location = /version { return 200 '{"version":"<%= $app_version %>"}'; }
+    location / { return 404 '{"error":"not found"}'; }
+}
+server {
+    listen <%= $admin_port %>;
+    default_type application/json;
+    location / { return 200 '{"admin":true}'; }
+}

@@ -1,0 +1,34 @@
+== first converge
+PASS  puppet first run made changes (exit 2)
+PASS  salt first run changed 8 states
+== second converge changes nothing
+PASS  puppet second run: no changes (exit 0)
+PASS  salt second run: 0 changes
+== HTTP API from the probe container
+PASS  node-puppet GET /healthz 200
+PASS  node-puppet GET /version body
+PASS  node-puppet unknown path 404
+PASS  node-puppet POST 405
+PASS  node-salt GET /healthz 200
+PASS  node-salt GET /version body
+PASS  node-salt unknown path 404
+PASS  node-salt POST 405
+== firewall: admin port is listening on the node but unreachable from the probe
+PASS  node-puppet :9090 dropped (curl timeout)
+PASS  node-puppet :9090 answers on loopback
+PASS  node-salt :9090 dropped (curl timeout)
+PASS  node-salt :9090 answers on loopback
+== parity between Puppet and Salt
+PASS  rendered nginx config is byte-identical
+PASS  INPUT firewall rules are identical
+== drift: edit the config, delete a firewall rule, stop nginx, then converge
+PASS  drift is real: node-puppet no longer serves
+PASS  puppet repaired drift (exit 2)
+PASS  salt repaired drift (3 states)
+PASS  node-puppet serves again after convergence
+PASS  node-salt serves again after convergence
+PASS  config identical again after repair
+PASS  puppet idempotent after repair
+PASS  salt idempotent after repair
+
+passed 26, failed 0
