@@ -10,7 +10,7 @@ bad()  { FAIL=$((FAIL+1)); printf 'FAIL  %s\n' "$*"; }
 check() { local name=$1; shift; if "$@" >/dev/null 2>&1; then ok "$name"; else bad "$name"; fi; }
 
 dc() { docker compose "$@"; }
-puppet_apply() { dc exec -T node-puppet puppet apply --hiera_config /lab/puppet/hiera.yaml /lab/puppet/site.pp --detailed-exitcodes >/tmp/puppet.out 2>&1; }
+puppet_apply() { dc exec -T node-puppet puppet apply --modulepath /lab/puppet/modules --hiera_config /lab/puppet/hiera.yaml /lab/puppet/site.pp --detailed-exitcodes >/tmp/puppet.out 2>&1; }
 salt_apply()   { dc exec -T node-salt /opt/salt/bin/salt-call -c /lab/salt-conf --local state.apply webnode --out=json 2>/dev/null | python3 scripts/salt_changes.py; }
 probe() { dc exec -T probe "$@"; }
 code()  { probe curl -s -m 3 -o /dev/null -w '%{http_code}' "$@"; }

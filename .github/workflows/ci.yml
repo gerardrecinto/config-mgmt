@@ -4,6 +4,15 @@ on:
     branches: [main]
   pull_request:
 jobs:
+  puppet-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: {ruby-version: "3.2", bundler-cache: true}
+      - run: bundle exec puppet parser validate puppet/site.pp puppet/modules/webnode/manifests/fw_allow.pp
+      - run: bundle exec puppet-lint puppet
+      - run: cd puppet/modules/webnode && bundle exec rspec
   converge:
     runs-on: ubuntu-latest
     steps:

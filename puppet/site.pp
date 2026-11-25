@@ -50,12 +50,9 @@ exec { 'fw-loopback':
   before  => Exec['fw-default-drop'],
 }
 $allow_ports.each |$p| {
-  $rule = "-s ${src} -p tcp -m tcp --dport ${p} -j ACCEPT"
-  exec { "fw-allow-${p}":
-    command => "iptables -A INPUT ${rule}",
-    unless  => "iptables -C INPUT ${rule}",
-    require => Package['iptables'],
-    before  => Exec['fw-default-drop'],
+  webnode::fw_allow { "port-${p}":
+    source => $src,
+    port   => $p,
   }
 }
 exec { 'fw-default-drop':

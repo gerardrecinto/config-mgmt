@@ -1,6 +1,6 @@
 # config-mgmt-lab
 
-The same Linux web node built twice, once with Puppet and once with Salt, from one desired-state file. A third container checks both from the outside: idempotency, HTTP API behavior, a default-deny firewall, parity between the tools, and drift repair. 26 checks, all run in Docker.
+The same Linux web node built twice, once with Puppet and once with Salt, from one desired-state file. A third container checks both from the outside: idempotency, HTTP API behavior, a default-deny firewall, parity between the tools, and drift repair. 26 converge checks run in Docker, plus 6 rspec-puppet examples.
 
 [Pages](https://gerardrecinto.github.io/config-mgmt-lab/) | [Recorded test output](docs/TEST_OUTPUT.txt)
 
@@ -22,6 +22,14 @@ Both tools read `desired-state.yaml` (API port, admin port, version string, allo
 - Firewall: accept established and loopback, accept the lab subnet to the API port, then default DROP on INPUT.
 
 Puppet lives in `puppet/` (manifest, EPP template, Hiera data lookup). Salt lives in `salt/` and `salt-conf/` (one state file, Jinja template). Both run masterless inside the node container.
+
+## Puppet module and Ruby specs
+
+The firewall allow rule is a defined type, `webnode::fw_allow`, in `puppet/modules/webnode`. It is unit tested with rspec-puppet (Ruby): the exact command, the `iptables -C` guard that keeps a second run quiet, the order against the package and the default DROP, and refusal of a port outside 1 to 65535 or an empty source. `puppet parser validate` and `puppet-lint` run in CI.
+
+```bash
+bundle install && (cd puppet/modules/webnode && bundle exec rspec) && bundle exec puppet-lint puppet
+```
 
 ## Checks
 
